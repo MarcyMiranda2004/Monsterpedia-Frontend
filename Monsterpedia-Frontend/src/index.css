@@ -1,0 +1,49 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+@font-face {
+  font-family: "LightboundRegular";
+  src: url("./assets/fonts/LightboundRegular-BLdLG.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "GreenEnergy";
+  src: url("./assets/fonts/Green_Energy.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.lbr {
+  font-family: "LightboundRegular", serif;
+}
+
+.lbr-bold {
+  font-family: "LightboundRegular", serif;
+  font-weight: bold;
+}
+
+.monster {
+  font-family: "GreenEnergy", serif;
+}
+
+.monster-bold {
+  font-family: "GreenEnergy", serif;
+  font-weight: bold;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.pointer-none {
+  pointer-events: none;
+}
+
+.no-select {
+  user-select: none;
+}
