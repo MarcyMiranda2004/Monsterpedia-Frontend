@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 import NotFoundPage from "./components/NotFoundPageComponent";
 import NavbarComponent from "./components/NavbarComponent";
+import LoginPageComponent from "./components/LoginPageComponent";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
 
         <main className="bg-m-black-sub">
           <Routes>
+            <Route path="/auth/login" element={<LoginPageComponent />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

@@ -1,0 +1,80 @@
+@import "../style/_variables.scss";
+
+.custom-shadow {
+box-shadow:
+    0 8px 20px rgba(0, 255, 0, 0.6),  // glow in basso 
+    0 -8px 20px rgba(0, 255, 0, 0.6), // glow in alto 
+    0 0 25px rgba(0, 255, 0, 0.7), // alone vicino
+    0 0 50px rgba(0, 255, 0, 0.5); // alone diffuso 
+}
+
+.form-camp {
+    background-color: map-get($theme-colors, "m-dark-gray");
+    border: 1px solid white;
+    margin: 0 !important;
+    transition: all 0.2s linear;
+    color: white; 
+
+    &::placeholder {
+        color: white;
+        opacity: 0.8;
+        font-weight: 100;
+    }
+
+    &:hover {
+        background-color: white;
+        color: map-get($theme-colors, "m-dark-gray");
+        border: 1px solid map-get($theme-colors, "m-dark-gray")
+    }
+
+    &:focus {
+        background-color: white;
+        color: map-get($theme-colors, "m-dark-gray");
+
+        &::placeholder {
+            color: map-get($theme-colors, "m-dark-gray");
+            opacity: 0.8;
+            font-weight: 100;
+        }
+    }
+}
+
+.formLabel label {
+    color: white;
+    transition: color 0.2s linear;
+}
+
+.form-camp:focus + label,
+.form-camp:hover + label {
+    color: map-get($theme-colors, "m-dark-gray");
+}
+
+.form-camp:valid + label {
+    color: white;
+}
+
+.form-camp:valid:hover + label,
+.form-camp:valid:focus + label {
+    color: map-get($theme-colors, "m-dark-gray");
+} 
+
+.link {
+    color: map-get($theme-colors, "m-dark-gray");
+    transition: color 0.2s linear;
+
+    &:hover {
+        color: white;
+    }
+}
+
+.btn {
+    background-color: map-get($theme-colors, "m-dark-gray");
+    color: white;
+    transition: 0.2s ease-in;
+
+    &:hover {
+        background-color: white !important;
+        color: map-get($theme-colors, "m-dark-gray") !important;
+        border: 1px solid map-get($theme-colors, "m-dark-gray") !important;
+    }
+}

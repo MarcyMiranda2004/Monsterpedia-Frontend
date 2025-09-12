@@ -3,6 +3,10 @@
   color: rgba(255, 255, 255, 0.87);
 }
 
+body {
+  padding-top: 150px;
+}
+
 @font-face {
   font-family: "LightboundRegular";
   src: url("./assets/fonts/LightboundRegular-BLdLG.ttf") format("truetype");

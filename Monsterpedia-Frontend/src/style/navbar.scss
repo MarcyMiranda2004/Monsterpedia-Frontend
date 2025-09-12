@@ -1,0 +1,134 @@
+@import "../style/_variables.scss";
+
+// logo
+.logo-trapezoide {
+    clip-path: polygon(0 0, 100% 0%, 72.5% 100%, 0% 100%);
+    height: 100%;
+    width: auto;
+}
+
+// tab user
+.user {
+    transition: transform 0.12s ease-in-out;
+
+    &:hover {
+        transform: scale(1.15);
+        color: map-get($theme-colors, "m-tertiary");
+    }
+}
+
+.person-dropdown {
+    margin: 0 !important;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    background-color: map-get($theme-colors, "m-dark-gray");
+    border: none !important;
+
+    .dropdown-menu {
+        background-color: map-get($theme-colors, "m-dark-gray");
+        border: 2px solid map-get($theme-colors, "m-tertiary");
+
+        .dropdown-item {
+            color: map-get($theme-colors, "m-secondary") !important;
+
+            &:hover,
+            &:focus {
+                background-color: map-get($theme-colors, "m-tertiary");
+                color: map-get($theme-colors, "m-dark-gray") !important;
+            }
+        }
+    }
+}
+
+.user-trapezoide {
+    clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 96.50% 0%);
+    margin-right: -2px !important;
+}
+
+.user-trapezoide-small {
+    clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 54.5% 0%);
+    margin-right: -21px !important;
+}
+
+// navbar sticky e mobile
+.navbar-sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+    transition: padding 0.3s ease, box-shadow 0.3s ease;
+
+    &.shrink {
+        padding: 0 !important;
+        box-shadow: none !important;
+
+        .navbar {
+            padding: 0.4rem 0 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        }
+    }
+
+    .navbar {
+        padding: 1rem 0 !important;
+        box-shadow: none !important;
+    }
+}
+
+// search bar
+.search-camp {
+    background-color: map-get($theme-colors, "m-dark-gray");
+    border: none;
+    border-right: 1px solid white;
+    color: white;
+    margin: 0 !important;
+    transition: background-color 0.2s linear;
+
+    &::placeholder {
+        color: white;
+        opacity: 0.8;
+        font-weight: 100;
+    }
+
+    &:hover {
+        background: white;
+        color: map-get($theme-colors, "m-dark-gray");
+        border: none;
+
+        &::placeholder {
+            color: map-get($theme-colors, "m-dark-gray");
+            opacity: 1;
+            font-weight: 300;
+        }
+    }
+
+    &:focus {
+        box-shadow: none;
+        background-color: white;
+        color: map-get($theme-colors, "m-dark-gray");
+
+        &::placeholder {
+            color: map-get($theme-colors, "m-dark-gray");
+            opacity: 0.8;
+            font-weight: 100;
+        }
+    }
+}
+
+.search-btn {
+    background-color: map-get($theme-colors, "m-dark-gray");
+    border: none;
+    transition: background-color 0.2s linear;
+
+    &:hover {
+        background: white;
+        color: map-get($theme-colors, "m-dark-gray");
+        border: none;
+    }
+
+    &:active {
+        background: white !important;
+        color: map-get($theme-colors, "m-dark-gray") !important;
+    }
+}

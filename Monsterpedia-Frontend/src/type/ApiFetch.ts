@@ -1,26 +1,35 @@
-const API = "http://localhost:8080"
+const API = "http://localhost:8080";
 
-type HttpMethod = "GET" | "POST" | "PUT" | "DELETE"
+type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"| "HEAD";
 
-async function apiFetch<T>(endpoint: string, method: HttpMethod = "GET", body?: any): Promise<T> {
-    const token = localStorage.getItem("token");
+async function apiFetch<T>(
+  endpoint: string,
+  method: HttpMethod = "GET",
+  body?: any,
+  customToken?: string
+): Promise<T> {
+  const token = customToken ?? localStorage.getItem("token");
 
-    const headers: HeadersInit = {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-    };
+  const headers: HeadersInit = { "Content-Type": "application/json" };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
 
-    const response = await fetch(`${API}/${endpoint}`, {
-        method,
-        headers,
-        body: body ? JSON.stringify(body) : undefined,
-    });
+  const options: RequestInit = {
+    method,
+    headers,
+  };
 
-    if (!response.ok) {
-        throw new Error(`Errore Api: ${response.status}, ${response.statusText}`);
-    }
+  if (body && method !== "GET" && method !== "HEAD") {
+    options.body = JSON.stringify(body);
+  }
 
-    return response.json();
+  const response = await fetch(`${API}/${endpoint}`, options);
+
+  if (!response.ok) {
+    throw new Error(`Errore Api: ${response.status}, ${response.statusText}`);
+  }
+
+  return response.json();
 }
 
 export default apiFetch;
+
