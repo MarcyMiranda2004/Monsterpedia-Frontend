@@ -1,58 +1,74 @@
-import React, { useState, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button, Container, FloatingLabel, Form, Image } from "react-bootstrap";
+import Recat, { useState, useEffect, useContext } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { Container, Form, Image, FloatingLabel, Button } from "react-bootstrap";
 import { Eye, EyeSlash } from "react-bootstrap-icons";
+
 import { AuthContext } from "../context/AuthContext";
 import apiFetch from "../type/ApiFetch";
+import type { RegisterPayload, LoginPayload } from "../type/AuthType";
 
 import img2 from "../assets/img 2.jpg";
-import "../style/login.scss";
-import { SEO_TYPES } from "@cloudinary/url-gen/assets/CloudinaryFile";
+import "../style/registration.scss";
 
-const LoginPageComponent: React.FC = () => {
+const RegistrationPageComponent: React.FC = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { login: contextLogin } = useContext(AuthContext);
+  const [showPassword, setShowPassword] = useState(true);
+
   const [passwordIsFocus, setPasswordIsFocus] = useState(false);
   const [passwordIsHover, setPasswordIsHover] = useState(false);
 
-  const handleLogin = async (ev: React.FormEvent<HTMLFormElement>) => {
+  const { login: contextLogin } = useContext(AuthContext);
+
+  const handleRegistration = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     setError(null);
 
     const formData = new FormData(ev.currentTarget);
-    const payload = Object.fromEntries(formData.entries());
+    const raw = Object.fromEntries(formData.entries());
+
+    const payloadRegister: RegisterPayload = {
+      username: raw.username as string,
+      email: raw.email as string,
+      password: raw.password as string,
+    };
+
+    const payloadLogin: LoginPayload = {
+      email: raw.email as string,
+      password: raw.password as string,
+    };
 
     try {
-      // Login
+      await apiFetch<{ message: string }>(
+        "auth/register",
+        "POST",
+        payloadRegister
+      );
+
       const { token, userId } = await apiFetch<{
         token: string;
         userId: number;
-      }>("auth/login", "POST", payload);
+      }>("auth/login", "POST", payloadLogin);
 
       localStorage.setItem("token", token);
 
-      // Recupero profilo
-      const profile = await apiFetch<{ role: string }>(
-        `users/dto/${userId}`,
-        "GET",
-        token
-      );
+      const profile = await apiFetch<{ role: string }>(`users/dto/${userId}`);
 
-      // Aggiorno contesto
       contextLogin(token, userId, profile.role);
 
-      // Navigo al profilo
       navigate(`/user-profile/${userId}`);
     } catch (err: any) {
-      setError(err.message || "Errore durante il login");
+      if (err.message.includes("409")) {
+        setError("Questa email è già registrata");
+      } else {
+        setError(err.message ?? "Errore durante la registrazione");
+      }
     }
   };
 
   return (
     <>
-      <Container className="d-flex justify-content-center align-items-center flex-column rounded-5 mt-5 p-4 custom-shadow border border-2 border-m-dark-gray custom-bg">
+      <Container className="d-flex justify-content-center align-items-center flex-column bg-m-tertiary rounded-5 mt-5 p-4 custom-shadow border border-2 border-m-dark-gray custom-bg">
         <Image
           src={img2}
           alt="image1"
@@ -60,16 +76,30 @@ const LoginPageComponent: React.FC = () => {
         ></Image>
         <p className=" monster fs-3">Unleash The Beast</p>
 
-        <h1 className="fs-2">---------- Login ----------</h1>
+        <h1 className="fs-2">---------- Sign up ----------</h1>
 
         <form
-          onSubmit={handleLogin}
           className="w-100 d-flex flex-column align-items-center mt-4"
+          onSubmit={handleRegistration}
         >
           <FloatingLabel
             controlId="floatingInput"
-            label="Email"
+            label="Username"
             className="mb-2 w-75 formLabel rounded-2"
+          >
+            <Form.Control
+              type="text"
+              name="username"
+              placeholder="Username"
+              className="rounded-2 form-camp w-100"
+              required
+            />
+          </FloatingLabel>
+
+          <FloatingLabel
+            controlId="floatingInput"
+            label="Email"
+            className="mb-2 mt-2 w-75 formLabel rounded-2"
           >
             <Form.Control
               type="email"
@@ -120,18 +150,13 @@ const LoginPageComponent: React.FC = () => {
           {error && <div className="text-danger mt-2 mb-3">{error}</div>}
 
           <div className="d-flex justify-content-between align-items-center mt-2 w-78">
-            <Link
-              to="/auth/forgot-password"
-              className="ms-4 fw-semibold text-decoration-none pointer small link"
-            >
-              Hai dimenticato la Password?
-            </Link>
+            <div></div>
 
             <Link
-              to="/auth/register"
+              to="/auth/login"
               className="me-4 fw-semibold text-decoration-none pointer small link"
             >
-              Crea un account
+              Hai già un account?
             </Link>
           </div>
 
@@ -139,7 +164,7 @@ const LoginPageComponent: React.FC = () => {
             type="submit"
             className="mt-5 mb-3 px-5 py-1 rounded-pill border border-1 loginBtn"
           >
-            <span className="monster fs-4">Accedi</span>
+            <span className="monster fs-4">Registrati</span>
           </Button>
         </form>
       </Container>
@@ -147,4 +172,4 @@ const LoginPageComponent: React.FC = () => {
   );
 };
 
-export default LoginPageComponent;
+export default RegistrationPageComponent;
