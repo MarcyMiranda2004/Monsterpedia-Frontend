@@ -24,12 +24,17 @@ async function apiFetch<T>(
 
   const response = await fetch(`${API}/${endpoint}`, options);
 
+  const text = await response.text();
+
   if (!response.ok) {
     throw new Error(`Errore Api: ${response.status}, ${response.statusText}`);
   }
 
-  return response.json();
+  if (response.status === 204) {
+    return null as unknown as T;
+  } 
+  
+  return text ? JSON.parse(text) : null as unknown as T;
 }
 
 export default apiFetch;
-

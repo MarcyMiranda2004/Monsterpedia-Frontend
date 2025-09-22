@@ -25,7 +25,9 @@ $custom-colors: (
     "m-light-gray": #626262,
     "m-white-gray": #8f8f8f,
     
+    "m-danger-sub": #d58e95,
     "m-danger": #D60017,
+    "m-danger-dom": #480007,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);

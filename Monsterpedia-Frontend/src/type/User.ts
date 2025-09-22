@@ -1,6 +1,6 @@
 export type Role = "USER" | "ADMIN";
 
-export interface UserDto {
+export type UserDto = {
   id: number;
   username: string;
   email: string;
@@ -8,23 +8,23 @@ export interface UserDto {
   role: Role;
 }
 
-export interface UpdateUserDto {
+export type UpdateUserDto = {
   username: string;
 }
 
-export interface ChangePasswordDto {
+export type ChangePasswordDto = {
   oldPassword: string;
   newPassword: string;
   confirmNewPassword: string;
 }
 
-export interface ChangeEmailDto {
+export type ChangeEmailDto = {
   password: string;
   currentEmail: string;
   newEmail: string;
   confirmNewEmail: string;
 }
 
-export interface DeleteUserDto {
+export type DeleteUserDto = {
   password: string;
 }

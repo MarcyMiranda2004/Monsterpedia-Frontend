@@ -10,6 +10,8 @@ import NotFoundPage from "./components/NotFoundPageComponent";
 import NavbarComponent from "./components/NavbarComponent";
 import LoginPageComponent from "./components/LoginPageComponent";
 import RegistrationPageComponent from "./components/RegistrationPageComponent";
+import UserProfilePageComponent from "./components/UserProfilePageComponent";
+import HomePageComponent from "./components/HomePageComponent";
 
 function App() {
   return (
@@ -21,12 +23,17 @@ function App() {
 
         <main className="px-2">
           <Routes>
-            <Route path="/auth/login" element={<LoginPageComponent />} />
             <Route path="*" element={<NotFoundPage />} />
+            <Route path="/auth/login" element={<LoginPageComponent />} />
             <Route
               path="/auth/register"
               element={<RegistrationPageComponent />}
             />
+            <Route
+              path="/users/user-profile/:userId"
+              element={<UserProfilePageComponent />}
+            />
+            <Route path="/home" element={<HomePageComponent />} />
           </Routes>
         </main>
 

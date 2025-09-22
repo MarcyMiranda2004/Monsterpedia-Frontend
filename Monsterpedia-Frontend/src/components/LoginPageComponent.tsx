@@ -45,8 +45,13 @@ const LoginPageComponent: React.FC = () => {
 
       // Navigo al profilo
       navigate(`/user-profile/${userId}`);
-    } catch (err: any) {
-      setError(err.message || "Errore durante il login");
+    } catch (error: any) {
+      const errorMessage = (error as Error).message;
+      if (errorMessage.includes("403") || errorMessage.includes("404")) {
+        setError("Utente con questa email/password non trovato");
+      } else {
+        setError("Errore durante il login: " + errorMessage);
+      }
     }
   };
 

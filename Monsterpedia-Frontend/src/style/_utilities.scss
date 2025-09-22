@@ -13,3 +13,28 @@
         padding: #{$i}px !important;
     }
 }
+
+@for $i from 1 through 100 {
+    .top-#{$i} {
+        width: #{$i + '%'};
+    }
+}
+
+@for $i from 1 through 100 {
+    .top-#{$i} {
+        top: #{$i}px !important;
+    }
+
+    .end-#{$i} {
+        right: #{$i}px !important;
+    }
+
+    .bottom-#{$i} {
+        bottom: #{$i}px !important;
+    }
+
+    .start-#{$i} {
+        left: #{$i}px !important;
+    }
+        
+}

@@ -52,6 +52,7 @@ const NavbarComponent: React.FC = () => {
           <Navbar.Brand
             href="#home"
             className="bg-m-dark-gray d-flex logo-trapezoide px-2 pe-5 d-none d-lg-block"
+            onClick={() => navigate("home")}
           >
             <Image
               src={logoBig}
@@ -65,6 +66,7 @@ const NavbarComponent: React.FC = () => {
           <Navbar.Brand
             href="#home"
             className="bg-m-dark-gray d-flex justify-content-center logo-trapezoide ps-4 pe-5 d-lg-none"
+            onClick={() => navigate("home")}
           >
             <Image
               src={logoSmall}
@@ -117,9 +119,9 @@ const NavbarComponent: React.FC = () => {
                 <>
                   <NavDropdown.Item
                     as="button"
-                    onClick={() => navigate(`/user-profile/${userId}`)}
+                    onClick={() => navigate(`/users/user-profile/${userId}`)}
                   >
-                    Profilo
+                    My Profile
                   </NavDropdown.Item>
 
                   <NavDropdown.Item

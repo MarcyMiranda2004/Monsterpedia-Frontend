@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 import type { ReactNode } from "react";
+
 interface AuthContextType {
   token: string | null;
   userId: number | null;
