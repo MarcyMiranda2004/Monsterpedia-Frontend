@@ -8,6 +8,10 @@ export type UserDto = {
   role: Role;
 }
 
+export type UpdateAvatarDto = {
+  avatarUrl: string
+}
+
 export type UpdateUserDto = {
   username: string;
 }

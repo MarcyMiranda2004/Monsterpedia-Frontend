@@ -3,8 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   Container,
   Image,
-  Row,
-  Col,
   Button,
   Modal,
   Form,
@@ -13,11 +11,16 @@ import {
 
 import { AuthContext } from "../context/AuthContext";
 import apiFetch from "../type/ApiFetch";
-import type { ChangePasswordDto, UpdateUserDto, UserDto } from "../type/User";
+import { apiUpload } from "../type/ApiUpload";
+import {
+  type ChangeEmailDto,
+  type ChangePasswordDto,
+  type UpdateUserDto,
+  type UserDto,
+} from "../type/User";
 
 import avatarPlaceholder from "../assets/placeholder.png";
 import { InfoCircleFill } from "react-bootstrap-icons";
-import { Spinner } from "react-bootstrap";
 import "../style/userPage.scss";
 import "../style/login.scss";
 
@@ -25,7 +28,7 @@ const UserProfilePageComponent: React.FC = () => {
   const navigate = useNavigate();
   const [isShowInfo, setIsShowInfo] = useState(false);
 
-  const { token, userId: ctxUserId, logout } = useContext(AuthContext); // dal AuthContext recupero token userId (salvato con il nome ctxUserId) e logout
+  const { userId: ctxUserId, logout } = useContext(AuthContext); // dal AuthContext recupero token userId (salvato con il nome ctxUserId) e logout
   const { userId: paramUserId } = useParams<{ userId: string }>(); // recupero lo userId dal parametro variabile ":userId" dell'URL salvandolo come paramUserId
   const uid = paramUserId ?? ctxUserId?.toString(); // dichiaro che uid ha come valore lo userId ricavato dal parametro ma se esso e undefine o null invece ha come valore allo userId ricavato dal contesto
 
@@ -33,13 +36,22 @@ const UserProfilePageComponent: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [user, setUser] = useState<UserDto | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [usernameDto, setUsernameDto] = useState<UpdateUserDto>({
     username: "",
   });
+  const [emailDto, setEmailDto] = useState<ChangeEmailDto>({
+    password: "",
+    currentEmail: "",
+    newEmail: "",
+    confirmNewEmail: "",
+  });
   const [password, setPassword] = useState("");
-  const [passwordDto, setPasswordDto] = useState<ChangePasswordDto | null>(
-    null
-  );
+  const [passwordDto, setPasswordDto] = useState<ChangePasswordDto>({
+    oldPassword: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
 
   const [showEditAvatar, setShowEditAvatar] = useState(false);
   const [showEditUsername, setShowEditUsername] = useState(false);
@@ -70,6 +82,26 @@ const UserProfilePageComponent: React.FC = () => {
     fetchUser();
   }, [uid]);
 
+  // Modifica Avatar
+  const handleEditAvatar = async (ev: FormEvent) => {
+    ev.preventDefault();
+
+    if (!uid || !selectedFile) return;
+
+    try {
+      const updatedUser = await apiUpload<UserDto>(
+        `users/${uid}/avatar`,
+        selectedFile
+      );
+      setUser(updatedUser);
+      setShowEditAvatar(false);
+      setSelectedFile(null);
+    } catch (error: any) {
+      console.error("Errore durante la modifica dell'Avatar", error);
+      alert(`Impossibile modificare l'avatar: ${error.message}`);
+    }
+  };
+
   // Modifica Username
   const openEditUsername = () => {
     if (user) {
@@ -78,11 +110,91 @@ const UserProfilePageComponent: React.FC = () => {
     }
   };
 
-  const handleEditUsername = async (ev: FormEvent) => {};
+  const handleEditUsername = async (ev: FormEvent) => {
+    ev.preventDefault();
+
+    if (!uid) return;
+
+    try {
+      const updatedUser = await apiFetch<UserDto>(
+        `users/${uid}/username`,
+        "PATCH",
+        usernameDto
+      );
+
+      setUser(updatedUser);
+      setShowEditUsername(false);
+    } catch (error: any) {
+      console.error("Errore durante la modifica dell'username: ", error);
+      alert(`Impossibile modificare l'username: ${error.message}`);
+    }
+  };
+
+  // Modifica Password
+  const handleEditPassword = async (ev: FormEvent) => {
+    ev.preventDefault();
+
+    if (!uid) return;
+
+    try {
+      const updateUser = await apiFetch<UserDto>(
+        `users/${uid}/password`,
+        "PUT",
+        {
+          oldPassword: passwordDto.oldPassword,
+          newPassword: passwordDto.newPassword,
+          confirmNewPassword: passwordDto.confirmNewPassword,
+        }
+      );
+
+      setUser(updateUser);
+      setShowEditPassword(false);
+    } catch (error: any) {
+      console.error("Errore durante la modifica della password: " + error);
+      alert(`impossibile modificare la password: ${error.message}`);
+    }
+  };
+
+  // Modifica Email
+  const openEditEmail = () => {
+    if (user) {
+      setEmailDto({
+        password: "",
+        currentEmail: user.email,
+        newEmail: "",
+        confirmNewEmail: "",
+      });
+      setShowEditEmail(true);
+    }
+  };
+
+  const handleEditEmail = async (ev: FormEvent) => {
+    ev.preventDefault();
+
+    if (!uid) return;
+
+    try {
+      const updatedUser = await apiFetch<UserDto>(`users/${uid}/email`, "PUT", {
+        password: emailDto.password,
+        currentEmail: emailDto.currentEmail,
+        newEmail: emailDto.newEmail,
+        confirmNewEmail: emailDto.confirmNewEmail,
+      });
+
+      setUser(updatedUser);
+      setShowEditEmail(false);
+    } catch (error: any) {
+      console.error("Errore durante la modifica dell'email: " + error);
+      alert(`impossibile modificare l'email: ${error.message}`);
+    }
+  };
 
   // Elimina Account
   const handleDeleteAccount = async (ev: FormEvent) => {
     ev.preventDefault();
+
+    if (!uid) return;
+
     try {
       await apiFetch(`users/${uid}`, "DELETE", { password });
 
@@ -120,7 +232,7 @@ const UserProfilePageComponent: React.FC = () => {
           <Image
             src={user.avatarUrl || avatarPlaceholder}
             alt="user_image"
-            className="rounded-3 rounded-3 userImg pointer mb-2 border border-1 border-m-secondary"
+            className="rounded-3 rounded-3 userImg pointer mb-2 border border-2 border-m-secondary"
             width={250}
             fluid
             onClick={() => setShowEditAvatar(true)}
@@ -134,7 +246,7 @@ const UserProfilePageComponent: React.FC = () => {
             </span>
             <p
               className="monster-email pointer mb-0 fs-5"
-              onClick={() => setShowEditEmail(true)}
+              onClick={openEditEmail}
             >
               {user.email || "email@dominio.net"}
             </p>
@@ -154,43 +266,37 @@ const UserProfilePageComponent: React.FC = () => {
         </div>
       </Container>
 
-      {/* Modale Elimina Account */}
-      <Modal show={showDelete} onHide={() => setShowDelete(false)}>
+      {/* Modale Modifica Avatar */}
+      <Modal show={showEditAvatar} onHide={() => setShowEditAvatar(false)}>
         <Form
-          onSubmit={handleDeleteAccount}
+          onSubmit={handleEditAvatar}
           className="border border-2 border-m-dark-gray rounded-3 custom-bg"
         >
-          <Modal.Header closeButton closeVariant="white">
-            <Modal.Title>Elimina Account</Modal.Title>
+          <Modal.Header closeButton closeVariant="dark">
+            <Modal.Title>Modifica il tuo Avatar</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p>
-              Sei sicuro di voler eliminare definitivamente il tuo account?
-              Inserisci la tua password per confermare.
-            </p>
-            <FloatingLabel
-              controlId="floatingPassword"
-              label="Password"
-              className="formLabel rounded-2"
-            >
-              <Form.Control
-                name="password"
-                placeholder="Password@2317"
-                className="rounded-2 form-camp"
-                required
-              />
-            </FloatingLabel>
+            <Form.Control
+              type="file"
+              required
+              name="file"
+              onChange={(e) => {
+                const input = e.target as HTMLInputElement;
+                const file = input.files?.[0] || null;
+                setSelectedFile(file);
+              }}
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button
               variant="secondary"
-              onClick={() => setShowDelete(false)}
+              onClick={() => setShowEditAvatar(false)}
               className="customBtn"
             >
               Annulla
             </Button>
-            <Button type="submit" className="conferme-delete-btn">
-              Elimina
+            <Button type="submit" className="save-btn">
+              Salva
             </Button>
           </Modal.Footer>
         </Form>
@@ -202,7 +308,7 @@ const UserProfilePageComponent: React.FC = () => {
           onSubmit={handleEditUsername}
           className="border border-2 border-m-dark-gray rounded-3 custom-bg"
         >
-          <Modal.Header closeButton closeVariant="white">
+          <Modal.Header closeButton closeVariant="dark">
             <Modal.Title>Modifica Username</Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -224,6 +330,226 @@ const UserProfilePageComponent: React.FC = () => {
             </Button>
             <Button type="submit" className="save-btn">
               Salva
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+
+      {/* Modale Modifica Email */}
+      <Modal show={showEditEmail} onHide={() => setShowEditEmail(false)}>
+        <Form
+          onSubmit={handleEditEmail}
+          className="border border-2 border-m-dark-gray rounded-3 custom-bg"
+        >
+          <Modal.Header closeButton closeVariant="dark">
+            <Modal.Title>Modifica Email</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <FloatingLabel
+              controlId="floatingPassword"
+              label="Password"
+              className="formLabel rounded-2 mb-2"
+            >
+              <Form.Control
+                name="Password"
+                placeholder="Password@2317"
+                className="rounded-2 form-camp"
+                onChange={(e) =>
+                  setEmailDto((prev) => ({
+                    ...prev,
+                    password: e.target.value,
+                  }))
+                }
+                required
+              />
+            </FloatingLabel>
+
+            <div className="formLabel rounded-2 my-2">
+              <Form.Control
+                name="Current Email"
+                value={emailDto.currentEmail}
+                onChange={(e) =>
+                  setEmailDto((prev) => ({
+                    ...prev,
+                    currentEmail: e.target.value,
+                  }))
+                }
+                placeholder="current.email@dominio.net"
+                className="rounded-2 form-camp py-3"
+                required
+              />
+            </div>
+
+            <FloatingLabel
+              controlId="floatingNewMail"
+              label="New Email"
+              className="formLabel rounded-2 my-2"
+            >
+              <Form.Control
+                name="New Mail"
+                onChange={(e) =>
+                  setEmailDto((prev) => ({ ...prev, newEmail: e.target.value }))
+                }
+                placeholder="new.email@dominio.net"
+                className="rounded-2 form-camp"
+                required
+              />
+            </FloatingLabel>
+
+            <FloatingLabel
+              controlId="floatingConfirmNewEmail"
+              label="Confirm New Email"
+              className="formLabel rounded-2 my-2"
+            >
+              <Form.Control
+                name="Confirm Mail"
+                onChange={(e) =>
+                  setEmailDto((prev) => ({
+                    ...prev,
+                    confirmNewEmail: e.target.value,
+                  }))
+                }
+                placeholder="confirm.email@dominio.net"
+                className="rounded-2 form-camp"
+                required
+              />
+            </FloatingLabel>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => setShowEditUsername(false)}
+              className="customBtn"
+            >
+              Annulla
+            </Button>
+            <Button type="submit" className="save-btn">
+              Salva
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+
+      {/* Modale Modifica Password */}
+      <Modal show={showEditPassword} onHide={() => setShowEditPassword(false)}>
+        <Form
+          onSubmit={handleEditPassword}
+          className="border border-2 border-m-dark-gray rounded-3 custom-bg"
+        >
+          <Modal.Header closeButton closeVariant="dark">
+            <Modal.Title>Modifica Password</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <FloatingLabel
+              controlId="floatingPassword"
+              label="Old Password"
+              className="formLabel rounded-2 my-2"
+              onChange={(e) => ({})}
+            >
+              <Form.Control
+                name="Old Password"
+                placeholder="OldPassword@2317"
+                className="rounded-2 form-camp"
+                onChange={(e) =>
+                  setPasswordDto((prev) => ({
+                    ...prev,
+                    oldPassword: e.target.value,
+                  }))
+                }
+                required
+              />
+            </FloatingLabel>
+
+            <FloatingLabel
+              controlId="floatingPassword"
+              label="New Password"
+              className="formLabel rounded-2 my-2"
+            >
+              <Form.Control
+                name="Password"
+                placeholder="NewPassword@2317"
+                className="rounded-2 form-camp"
+                onChange={(e) =>
+                  setPasswordDto((prev) => ({
+                    ...prev,
+                    newPassword: e.target.value,
+                  }))
+                }
+                required
+              />
+            </FloatingLabel>
+
+            <FloatingLabel
+              controlId="floatingPassword"
+              label="Confirm New Password"
+              className="formLabel rounded-2 my-2"
+            >
+              <Form.Control
+                name="Password"
+                placeholder="ConfermeNewPassword@2317"
+                className="rounded-2 form-camp"
+                onChange={(e) =>
+                  setPasswordDto((prev) => ({
+                    ...prev,
+                    confirmNewPassword: e.target.value,
+                  }))
+                }
+                required
+              />
+            </FloatingLabel>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => setShowEditPassword(false)}
+              className="customBtn"
+            >
+              Annulla
+            </Button>
+            <Button type="submit" className="save-btn">
+              Salva
+            </Button>
+          </Modal.Footer>
+        </Form>
+      </Modal>
+
+      {/* Modale Elimina Account */}
+      <Modal show={showDelete} onHide={() => setShowDelete(false)}>
+        <Form
+          onSubmit={handleDeleteAccount}
+          className="border border-2 border-m-dark-gray rounded-3 custom-bg"
+        >
+          <Modal.Header closeButton closeVariant="dark">
+            <Modal.Title>Elimina Account</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>
+              Sei sicuro di voler eliminare definitivamente il tuo account?
+              Inserisci la tua password per confermare.
+            </p>
+            <FloatingLabel
+              controlId="floatingPassword"
+              label="Password"
+              className="formLabel rounded-2"
+            >
+              <Form.Control
+                name="Password"
+                placeholder="Password@2317"
+                className="rounded-2 form-camp"
+                required
+              />
+            </FloatingLabel>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDelete(false)}
+              className="customBtn"
+            >
+              Annulla
+            </Button>
+            <Button type="submit" className="conferme-delete-btn">
+              Elimina
             </Button>
           </Modal.Footer>
         </Form>
