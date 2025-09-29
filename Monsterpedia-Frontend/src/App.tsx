@@ -12,6 +12,7 @@ import LoginPageComponent from "./components/LoginPageComponent";
 import RegistrationPageComponent from "./components/RegistrationPageComponent";
 import UserProfilePageComponent from "./components/UserProfilePageComponent";
 import HomePageComponent from "./components/HomePageComponent";
+import MonsterDetailsComponent from "./components/MonstersDetailsComponent";
 
 function App() {
   return (
@@ -23,7 +24,6 @@ function App() {
 
         <main className="px-2">
           <Routes>
-            <Route path="*" element={<NotFoundPage />} />
             <Route path="/auth/login" element={<LoginPageComponent />} />
             <Route
               path="/auth/register"
@@ -34,6 +34,11 @@ function App() {
               element={<UserProfilePageComponent />}
             />
             <Route path="/home" element={<HomePageComponent />} />
+            <Route
+              path="/monsters/:monsterId/details"
+              element={<MonsterDetailsComponent />}
+            />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
 

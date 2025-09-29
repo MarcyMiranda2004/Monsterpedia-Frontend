@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, type FormEvent } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Container,
   Image,
@@ -9,7 +9,7 @@ import {
   FloatingLabel,
 } from "react-bootstrap";
 
-import { AuthContext } from "../context/AuthContext";
+import { useUserId } from "../type/UseUserId";
 import apiFetch from "../type/ApiFetch";
 import { apiUpload } from "../type/ApiUpload";
 import {
@@ -28,9 +28,7 @@ const UserProfilePageComponent: React.FC = () => {
   const navigate = useNavigate();
   const [isShowInfo, setIsShowInfo] = useState(false);
 
-  const { userId: ctxUserId, logout } = useContext(AuthContext); // dal AuthContext recupero token userId (salvato con il nome ctxUserId) e logout
-  const { userId: paramUserId } = useParams<{ userId: string }>(); // recupero lo userId dal parametro variabile ":userId" dell'URL salvandolo come paramUserId
-  const uid = paramUserId ?? ctxUserId?.toString(); // dichiaro che uid ha come valore lo userId ricavato dal parametro ma se esso e undefine o null invece ha come valore allo userId ricavato dal contesto
+  const { uid, logout } = useUserId();
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

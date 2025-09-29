@@ -1,4 +1,4 @@
-import Recat, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Container, Form, Image, FloatingLabel, Button } from "react-bootstrap";
 import { Eye, EyeSlash } from "react-bootstrap-icons";

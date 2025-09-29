@@ -55,3 +55,7 @@ body {
 .no-select {
   user-select: none;
 }
+
+.bg-none {
+  background: none !important;
+}
