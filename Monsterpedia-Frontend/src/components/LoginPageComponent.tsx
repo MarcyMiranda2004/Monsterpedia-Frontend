@@ -7,7 +7,6 @@ import apiFetch from "../type/ApiFetch";
 
 import img2 from "../assets/img 2.jpg";
 import "../style/login.scss";
-import { SEO_TYPES } from "@cloudinary/url-gen/assets/CloudinaryFile";
 
 const LoginPageComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -25,7 +24,6 @@ const LoginPageComponent: React.FC = () => {
     const payload = Object.fromEntries(formData.entries());
 
     try {
-      // Login
       const { token, userId } = await apiFetch<{
         token: string;
         userId: number;
@@ -44,7 +42,7 @@ const LoginPageComponent: React.FC = () => {
       contextLogin(token, userId, profile.role);
 
       // Navigo al profilo
-      navigate(`/user-profile/${userId}`);
+      navigate(`/users/user-profile/${userId}`);
     } catch (error: any) {
       const errorMessage = (error as Error).message;
       if (errorMessage.includes("403") || errorMessage.includes("404")) {

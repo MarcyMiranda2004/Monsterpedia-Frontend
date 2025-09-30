@@ -1,0 +1,85 @@
+@import "../style/_variables.scss";
+
+.mt-custom {
+    margin-top: 10.25rem ;
+}
+
+.detail-custom-bg {
+    position: relative;
+    background: linear-gradient(to bottom right,
+        map-get($theme-colors, "m-black") 45%,
+        map-get($theme-colors, "m-light-gray") 100%,);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    padding-bottom: 6rem;
+}
+
+
+.opinion-btn {
+    transition: all 0.1s ease-in-out; 
+
+    &:hover {
+        transform: scale(1.15);
+        box-shadow: 0 0 15px map-get($theme-colors, "m-light-gray");
+    }
+
+    &:active {
+        transform: scale(0.90);
+    }
+}
+
+.opinion-container {
+    position: absolute;
+        bottom: 1rem;
+        transform: translateX(-30%);
+        transform: translateY(80%);
+        background: map-get($theme-colors, "m-dark-gray");
+        border: 2px solid map-get($theme-colors, "m-light-gray");
+        padding: 1rem;
+        border-radius: 8px;
+}
+
+.monster-category {
+    position: absolute;
+    top: -3.08rem;
+    background: map-get($theme-colors, "m-black");
+    border: 2px solid transparent;
+    border-image: linear-gradient(to bottom,
+        map-get($theme-colors, "m-light-gray") 50%,
+        map-get($theme-colors, "m-black") 50%) 1
+}
+
+.absolute-monster-img {
+    position: absolute;
+    top: -15%;
+    right: 2%;
+}
+
+@media (max-width: 768px) {
+    .absolute-monster-img {
+        position: static;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .absolute-monster-img {
+        position: static;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    .absolute-monster-img {
+        width: 255px;
+        top: -9%;
+        right: 0%;
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .absolute-monster-img {
+        width: 255px;
+        top: -15%;
+        right: 0%;
+    }
+}

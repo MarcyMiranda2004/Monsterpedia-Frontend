@@ -1,13 +1,10 @@
-import React, { useContext } from "react";
 import { Container, Card, Row, Col, Image } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { readdirSync, statSync } from "fs";
-import path from "path";
 
 import {
   Categories,
-  type Category,
+  logosImg,
   type MonsterDto,
   type Section,
 } from "../type/Monster";
@@ -20,20 +17,6 @@ const HomePageComponent: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<String | null>(null);
   const [section, setSection] = useState<Section<MonsterDto>[]>([]);
-  const [monster, setMonster] = useState<MonsterDto[]>([]);
-
-  const logosImg = [
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759152732/Energy_Logo_duu0uv.webp",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759159007/Espresso_Logo_yrwbuv.png",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759152734/Java_Logo_m55w9k.png",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759152735/Juice_Logo_dbz72s.webp",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759152729/Killer_Brew_Logo_pwwfrf.png",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759152730/Punch_Logo_y4elds.png",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759152730/Rehab_Logo_ylgxq2.webp",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759166467/Monster_Reserve_tzktxy.png",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759152731/Super_Fuel_Logo_quhxbd.webp",
-    "https://res.cloudinary.com/dqtrha0hz/image/upload/v1759152732/Ultra_Logo_vsals9.webp",
-  ];
 
   const logos = Categories.map((category, i) => ({
     category,
@@ -46,7 +29,6 @@ const HomePageComponent: React.FC = () => {
         setLoading(true);
 
         const monsters = await apiFetch<MonsterDto[]>(`monsters`, "GET");
-        setMonster(monsters as MonsterDto[]);
 
         const sections: Section<MonsterDto>[] = Categories.map((cat) => ({
           id: cat,
