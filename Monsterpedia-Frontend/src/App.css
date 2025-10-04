@@ -2,14 +2,20 @@ html,
 body,
 #root {
   height: 100%;
+  margin: 0;
+}
+
+body > div {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 main {
-  height: calc(100vh - 70px);
-  overflow-y: auto;
-  padding-right: 10px;
+  flex: 1;
 }
 
-.pointer {
-  cursor: pointer;
+footer {
+  color: #fff;
+  text-align: center;
 }

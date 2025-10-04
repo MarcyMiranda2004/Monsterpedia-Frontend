@@ -7,8 +7,6 @@ import { AuthContext } from "../context/AuthContext";
 
 import { PersonCircle, Search } from "react-bootstrap-icons";
 
-import logoSmall from "../assets/Monster Png/Monsterpedia Logo 1.png";
-import logoBig from "../assets/Monster Png/Monsterpedia Logo 2.png";
 import "../style/global.scss";
 import "../style/navbar.scss";
 
@@ -17,17 +15,19 @@ const NavbarComponent: React.FC = () => {
   const [isShrunk, setIsShrunk] = useState(false);
   const { token, userId, userRole, logout } = useContext(AuthContext);
   const isLoggedIn = !!token;
-  const isBackofficeUser = userRole === "ADMIN";
+  const isBackOfficeUser = userRole === "ADMIN";
 
   const handleReload = () => {
     window.location.reload();
   };
 
   const [searchTerm, setSearchTerm] = useState("");
-  const handleSubmitSearch = (e: React.FormEvent) => {
+
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+
     if (searchTerm.trim()) {
-      navigate(`/search?title=${encodeURIComponent(searchTerm.trim())}`);
+      navigate(`search?query=${encodeURIComponent(searchTerm)}`);
     }
   };
 
@@ -50,12 +50,11 @@ const NavbarComponent: React.FC = () => {
         <div className="d-flex align-items-center w-100 monster-bg-1">
           {/* Logo md+ */}
           <Navbar.Brand
-            href="#home"
-            className="bg-m-dark-gray d-flex logo-trapezoide px-2 pe-5 d-none d-lg-block"
+            className="bg-m-dark-gray d-flex logo-trapezoide px-2 pe-5 d-none d-lg-block pointer"
             onClick={() => navigate("home")}
           >
             <Image
-              src={logoBig}
+              src="https://res.cloudinary.com/dqtrha0hz/image/upload/v1759525300/Monsterpedia_Logo_2_glba3e.png"
               alt="Monsterpedia_Logo"
               className="me-3 pe-5"
               width={335}
@@ -64,12 +63,11 @@ const NavbarComponent: React.FC = () => {
 
           {/* Logo sm */}
           <Navbar.Brand
-            href="#home"
             className="bg-m-dark-gray d-flex justify-content-center logo-trapezoide ps-4 pe-5 d-lg-none"
             onClick={() => navigate("home")}
           >
             <Image
-              src={logoSmall}
+              src="https://res.cloudinary.com/dqtrha0hz/image/upload/v1756132168/Monsterpedia_Logo_oaanuz.png"
               alt="Monsterpedia_Logo"
               width={126}
               className="me-3 pe-5"
@@ -78,7 +76,7 @@ const NavbarComponent: React.FC = () => {
 
           {/* Search Bar Lg*/}
           <div className="w-100 d-flex justify-content-center align-items-center">
-            <Form className="w-75 d-none d-md-flex">
+            <Form className="w-75 d-none d-md-flex" onSubmit={handleSearch}>
               <Form.Control
                 type="search"
                 placeholder="Unleash The Beast..."
@@ -138,12 +136,12 @@ const NavbarComponent: React.FC = () => {
                     My Tasting List
                   </NavDropdown.Item>
 
-                  {isBackofficeUser && (
+                  {isBackOfficeUser && (
                     <NavDropdown.Item
                       as="button"
-                      onClick={() => navigate("/backoffice")}
+                      onClick={() => navigate("/backOffice")}
                     >
-                      Backoffice
+                      BackOffice
                     </NavDropdown.Item>
                   )}
 
@@ -181,14 +179,14 @@ const NavbarComponent: React.FC = () => {
         </div>
 
         <div className="d-flex d-md-none justify-content-center align-items-center py-3 bg-m-black border-bottom border-top border-1 border-m-tertiary monster-bg-1 w-100">
-          <Form className="d-flex w-75">
+          <Form className="d-flex w-75" onSubmit={handleSearch}>
             <Form.Control
               type="search"
               placeholder="Unleash The Beast..."
               className="search-camp rounded-end-0"
               aria-label="Search"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.currentTarget.value)}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Button className="border border-1 border-m-dark-gray search-btn rounded-start-0">
               <Search size={20}></Search>
@@ -199,4 +197,5 @@ const NavbarComponent: React.FC = () => {
     </>
   );
 };
+
 export default NavbarComponent;

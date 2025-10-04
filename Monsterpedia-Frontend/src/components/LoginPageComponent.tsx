@@ -6,10 +6,12 @@ import { AuthContext } from "../context/AuthContext";
 import apiFetch from "../type/ApiFetch";
 
 import img2 from "../assets/img 2.jpg";
+import MonsterSpinner from "./Spinner";
 import "../style/login.scss";
 
 const LoginPageComponent: React.FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { login: contextLogin } = useContext(AuthContext);
@@ -24,6 +26,8 @@ const LoginPageComponent: React.FC = () => {
     const payload = Object.fromEntries(formData.entries());
 
     try {
+      setLoading(true);
+
       const { token, userId } = await apiFetch<{
         token: string;
         userId: number;
@@ -41,17 +45,28 @@ const LoginPageComponent: React.FC = () => {
       // Aggiorno contesto
       contextLogin(token, userId, profile.role);
 
-      // Navigo al profilo
-      navigate(`/users/user-profile/${userId}`);
-    } catch (error: any) {
+      if (token) {
+        navigate(`/users/user-profile/${userId}`);
+      }
+    } catch (error: unknown) {
       const errorMessage = (error as Error).message;
       if (errorMessage.includes("403") || errorMessage.includes("404")) {
         setError("Utente con questa email/password non trovato");
       } else {
-        setError("Errore durante il login: " + errorMessage);
+        setError(`Errore durante il login:${errorMessage}`);
       }
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <Container className="text-m-tertiary d-flex align-items-center justify-content-center">
+        <MonsterSpinner /> <p>Caricamento...</p>
+      </Container>
+    );
+  }
 
   return (
     <>
@@ -120,7 +135,17 @@ const LoginPageComponent: React.FC = () => {
             </span>
           </div>
 
-          {error && <div className="text-danger mt-2 mb-3">{error}</div>}
+          {error && (
+            <div
+              style={{
+                color: "red",
+                fontWeight: "semi-bold",
+                marginTop: "10px",
+              }}
+            >
+              {error}
+            </div>
+          )}
 
           <div className="d-flex justify-content-between align-items-center mt-2 w-78">
             <Link

@@ -8,10 +8,12 @@ import apiFetch from "../type/ApiFetch";
 import type { RegisterPayload, LoginPayload } from "../type/AuthType";
 
 import img2 from "../assets/img 2.jpg";
+import MonsterSpinner from "./Spinner";
 import "../style/registration.scss";
 
 const RegistrationPageComponent: React.FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(true);
 
@@ -39,6 +41,7 @@ const RegistrationPageComponent: React.FC = () => {
     };
 
     try {
+      setLoading(true);
       await apiFetch<{ message: string }>(
         "auth/register",
         "POST",
@@ -57,14 +60,28 @@ const RegistrationPageComponent: React.FC = () => {
       contextLogin(token, userId, profile.role);
 
       navigate(`/user-profile/${userId}`);
-    } catch (err: any) {
-      if (err.message.includes("409")) {
+    } catch (error: any) {
+      if (error.message.includes("409")) {
         setError("Questa email è già registrata");
       } else {
-        setError(err.message ?? "Errore durante la registrazione");
+        setError(error.message ?? "Errore durante la registrazione");
       }
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading) {
+    return (
+      <Container className="text-m-tertiary d-flex align-items-center justify-content-center">
+        <MonsterSpinner /> <p>Caricamento...</p>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <>

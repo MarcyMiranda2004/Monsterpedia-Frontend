@@ -10,12 +10,13 @@ import {
 } from "../type/Monster";
 import apiFetch from "../type/ApiFetch";
 
+import MonsterSpinner from "./Spinner";
 import "../style/home.scss";
 
 const HomePageComponent: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<String | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [section, setSection] = useState<Section<MonsterDto>[]>([]);
 
   const logos = Categories.map((category, i) => ({
@@ -37,8 +38,8 @@ const HomePageComponent: React.FC = () => {
         }));
 
         setSection(sections);
-      } catch (error: any) {
-        console.error("Errore nel recupero delle monster:", error);
+      } catch (error: unknown) {
+        console.error(`Errore nel recupero delle monster:, ${error}`);
         setError("Impossibile caricare le monster");
       } finally {
         setLoading(false);
@@ -48,9 +49,23 @@ const HomePageComponent: React.FC = () => {
     fetchMonsters();
   }, []);
 
+  if (loading) {
+    return (
+      <Container className="text-m-tertiary d-flex align-items-center justify-content-center">
+        <MonsterSpinner /> <p>Caricamento...</p>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return <p className="text-danger">{error}</p>;
+  }
+
+  if (!section) return <p>Nessuna sezione trovata.</p>;
+
   return (
     <>
-      <Container>
+      <Container className="m-custom">
         {loading && <p>Caricamento in corso...</p>}
         {error && <p>{error}</p>}
 
@@ -59,7 +74,7 @@ const HomePageComponent: React.FC = () => {
             {logos.map(({ category, url }) => (
               <Col
                 key={category}
-                xs={5}
+                sm={6}
                 md={4}
                 lg={2}
                 className="ms-2 me-3 mb-2"

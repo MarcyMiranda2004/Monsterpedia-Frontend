@@ -53,9 +53,14 @@ body {
 }
 
 .no-select {
+  -webkit-user-select: none;
   user-select: none;
 }
 
 .bg-none {
   background: none !important;
+}
+
+.pointer {
+  cursor: pointer;
 }

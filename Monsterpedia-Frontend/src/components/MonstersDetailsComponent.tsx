@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Image, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Row, Col, Image } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import apiFetch from "../type/ApiFetch";
 
-import {
-  Categories,
-  logosImg,
-  categoryLogos,
-  type MonsterDto,
-  type Section,
-} from "../type/Monster";
+import { categoryLogos, type MonsterDto } from "../type/Monster";
 
+import MonsterSpinner from "./Spinner";
 import "../style/details.scss";
 
 const MonsterDetailsComponent = () => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<String | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [monster, setMonster] = useState<MonsterDto | null>(null);
   const { monsterId } = useParams<{ monsterId: string }>();
 
@@ -35,13 +28,16 @@ const MonsterDetailsComponent = () => {
     const fetchMonsters = async () => {
       try {
         setLoading(true);
+
         const monster = await apiFetch<MonsterDto>(
           `monsters/id/${monsterId}`,
           "GET"
         );
         setMonster(monster);
-      } catch (error: any) {
-        console.error("Errore nel recupero dei dati della monster");
+      } catch (error: unknown) {
+        console.error(
+          `Errore nel recupero dei dati della monster | Errore: ${error}`
+        );
         setError("Impossibile recuperare i dati della monster");
       } finally {
         setLoading(false);
@@ -52,7 +48,11 @@ const MonsterDetailsComponent = () => {
   }, [monsterId]);
 
   if (loading) {
-    return <p>Caricamento...</p>;
+    return (
+      <div>
+        <MonsterSpinner /> Caricamento...
+      </div>
+    );
   }
 
   if (error) {

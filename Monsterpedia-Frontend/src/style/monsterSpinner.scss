@@ -1,0 +1,19 @@
+@import "./variables.scss";
+
+.monster-spinner {
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+.monster-spinner img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

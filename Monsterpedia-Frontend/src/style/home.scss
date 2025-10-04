@@ -7,3 +7,9 @@
         transform: scale(1.15);
     }
 }
+
+@media (max-width: 766px) {
+.m-custom {
+    margin-top: 3rem;
+}
+}

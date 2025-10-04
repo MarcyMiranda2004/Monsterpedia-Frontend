@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, type FormEvent } from "react";
+import React, { useState, useEffect, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Container,
@@ -21,17 +21,17 @@ import {
 
 import avatarPlaceholder from "../assets/placeholder.png";
 import { InfoCircleFill } from "react-bootstrap-icons";
+import MonsterSpinner from "./Spinner";
 import "../style/userPage.scss";
 import "../style/login.scss";
 
 const UserProfilePageComponent: React.FC = () => {
   const navigate = useNavigate();
-  const [isShowInfo, setIsShowInfo] = useState(false);
-
-  const { uid, logout } = useUserId();
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [isShowInfo, setIsShowInfo] = useState(false);
+  const { uid, logout } = useUserId();
 
   const [user, setUser] = useState<UserDto | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -69,7 +69,7 @@ const UserProfilePageComponent: React.FC = () => {
       try {
         const userData = await apiFetch<UserDto>(`users/dto/${uid}`, "GET");
         setUser(userData);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Errore nel recupero dati utente: " + error);
         setError("Errore nel recupero dati utente");
       } finally {
@@ -94,9 +94,9 @@ const UserProfilePageComponent: React.FC = () => {
       setUser(updatedUser);
       setShowEditAvatar(false);
       setSelectedFile(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Errore durante la modifica dell'Avatar", error);
-      alert(`Impossibile modificare l'avatar: ${error.message}`);
+      alert(`Impossibile modificare l'avatar: ${error}`);
     }
   };
 
@@ -122,9 +122,9 @@ const UserProfilePageComponent: React.FC = () => {
 
       setUser(updatedUser);
       setShowEditUsername(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Errore durante la modifica dell'username: ", error);
-      alert(`Impossibile modificare l'username: ${error.message}`);
+      alert(`Impossibile modificare l'username: ${error}`);
     }
   };
 
@@ -147,9 +147,9 @@ const UserProfilePageComponent: React.FC = () => {
 
       setUser(updateUser);
       setShowEditPassword(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Errore durante la modifica della password: " + error);
-      alert(`impossibile modificare la password: ${error.message}`);
+      alert(`impossibile modificare la password: ${error}`);
     }
   };
 
@@ -181,9 +181,9 @@ const UserProfilePageComponent: React.FC = () => {
 
       setUser(updatedUser);
       setShowEditEmail(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Errore durante la modifica dell'email: " + error);
-      alert(`impossibile modificare l'email: ${error.message}`);
+      alert(`impossibile modificare l'email: ${error}`);
     }
   };
 
@@ -199,13 +199,19 @@ const UserProfilePageComponent: React.FC = () => {
       logout();
       setPassword("");
       navigate("/home");
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Errore durante l'eliminazione:", error);
-      alert(`Impossibile eliminare l'account: ${error.message}`);
+      alert(`Impossibile eliminare l'account: ${error}`);
     }
   };
 
-  if (loading) return <p>Caricamento in corso...</p>;
+  if (loading) {
+    return (
+      <Container className="text-m-tertiary d-flex align-items-center justify-content-center">
+        <MonsterSpinner /> <p>Caricamento...</p>
+      </Container>
+    );
+  }
   if (error) return <p>{error}</p>;
   if (!user) return <p>Utente non trovato</p>;
 
@@ -442,7 +448,6 @@ const UserProfilePageComponent: React.FC = () => {
               controlId="floatingPassword"
               label="Old Password"
               className="formLabel rounded-2 my-2"
-              onChange={(e) => ({})}
             >
               <Form.Control
                 name="Old Password"

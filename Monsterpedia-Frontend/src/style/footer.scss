@@ -1,0 +1,10 @@
+@import "./variables";
+
+.custom-link {
+    color: map-get($theme-colors, "m-white");
+    text-decoration: none;
+
+    &:hover {
+        color: map-get($theme-colors, "m-tertiary")
+    }
+}
