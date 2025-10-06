@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/monsterSpinner.scss";
+import "../../style/monsterSpinner.scss";
 
 const MonsterSpinner: React.FC = () => {
   return (

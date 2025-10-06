@@ -1,0 +1,31 @@
+@import "./variables";
+
+.details {
+    cursor: pointer;
+    &:hover {
+        color: map-get($theme-colors, "m-tertiary");
+    } 
+}
+
+.details-btn {
+    &:active {
+        background-color: map-get($theme-colors, "m-tertiary") !important;
+            color: map-get($theme-colors, "m-dark-gray") !important;
+    }
+}
+
+.bo-btn {
+    transition: 0.2s ease-in;
+    &:hover {
+        background-color: map-get($theme-colors, "m-tertiary" ) !important;
+        color: white !important; 
+    }
+}
+
+.action-btn {
+    transition: 0.2s ease-in;
+
+    &:hover {
+        transform: scale(1.25);
+    }
+}

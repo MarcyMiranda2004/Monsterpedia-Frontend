@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import apiFetch from "../type/ApiFetch";
+import apiFetch from "../../type/ApiFetch";
 
-import { categoryLogos, type MonsterDto } from "../type/Monster";
+import { categoryLogos, type MonsterDto } from "../../type/Monster";
 
-import MonsterSpinner from "./Spinner";
-import "../style/details.scss";
+import MonsterSpinner from "../Element/Spinner";
+import "../../style/details.scss";
 
 const MonsterDetailsComponent = () => {
   const [loading, setLoading] = useState(true);
@@ -49,14 +49,18 @@ const MonsterDetailsComponent = () => {
 
   if (loading) {
     return (
-      <div>
-        <MonsterSpinner /> Caricamento...
-      </div>
+      <Container className="text-m-tertiary d-flex align-items-center justify-content-center">
+        <MonsterSpinner /> <p>Caricamento...</p>
+      </Container>
     );
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return (
+      <Container className="d-flex align-items-center justify-content-center">
+        <p className="text-danger">{error}</p>;
+      </Container>
+    );
   }
 
   if (!monster) return <p>Nessuna monster trovata.</p>;

@@ -9,21 +9,21 @@ import {
   FloatingLabel,
 } from "react-bootstrap";
 
-import { useUserId } from "../type/UseUserId";
-import apiFetch from "../type/ApiFetch";
-import { apiUpload } from "../type/ApiUpload";
+import { useUserId } from "../../type/UseUserId";
+import apiFetch from "../../type/ApiFetch";
+import { apiUpload } from "../../type/ApiUpload";
 import {
   type ChangeEmailDto,
   type ChangePasswordDto,
   type UpdateUserDto,
   type UserDto,
-} from "../type/User";
+} from "../../type/User";
 
-import avatarPlaceholder from "../assets/placeholder.png";
+import avatarPlaceholder from "../../assets/placeholder.png";
 import { InfoCircleFill } from "react-bootstrap-icons";
-import MonsterSpinner from "./Spinner";
-import "../style/userPage.scss";
-import "../style/login.scss";
+import MonsterSpinner from "../Element/Spinner";
+import "../../style/userPage.scss";
+import "../../style/login.scss";
 
 const UserProfilePageComponent: React.FC = () => {
   const navigate = useNavigate();

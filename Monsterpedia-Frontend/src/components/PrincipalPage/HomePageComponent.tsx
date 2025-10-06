@@ -7,11 +7,11 @@ import {
   logosImg,
   type MonsterDto,
   type Section,
-} from "../type/Monster";
-import apiFetch from "../type/ApiFetch";
+} from "../../type/Monster";
+import apiFetch from "../../type/ApiFetch";
 
-import MonsterSpinner from "./Spinner";
-import "../style/home.scss";
+import MonsterSpinner from ".././Element/Spinner";
+import "../../style/home.scss";
 
 const HomePageComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const HomePageComponent: React.FC = () => {
 
         setSection(sections);
       } catch (error: unknown) {
-        console.error(`Errore nel recupero delle monster:, ${error}`);
+        console.error(`Errore nel recupero delle monster: ${error}`);
         setError("Impossibile caricare le monster");
       } finally {
         setLoading(false);
@@ -66,19 +66,10 @@ const HomePageComponent: React.FC = () => {
   return (
     <>
       <Container className="m-custom">
-        {loading && <p>Caricamento in corso...</p>}
-        {error && <p>{error}</p>}
-
         <div className="mb-5">
-          <Row className="d-flex justify-content-center align-items-center mb-3">
+          <Row className="d-flex justify-content-center align-items-center mb-3 w-100 g-2">
             {logos.map(({ category, url }) => (
-              <Col
-                key={category}
-                sm={6}
-                md={4}
-                lg={2}
-                className="ms-2 me-3 mb-2"
-              >
+              <Col key={category} xs={6} sm={6} md={4} lg={2} className="mb-2">
                 <Image
                   src={url}
                   alt={`Logo ${category}`}

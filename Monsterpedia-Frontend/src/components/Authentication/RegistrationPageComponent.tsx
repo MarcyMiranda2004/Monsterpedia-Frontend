@@ -3,13 +3,13 @@ import { useNavigate, Link } from "react-router-dom";
 import { Container, Form, Image, FloatingLabel, Button } from "react-bootstrap";
 import { Eye, EyeSlash } from "react-bootstrap-icons";
 
-import { AuthContext } from "../context/AuthContext";
-import apiFetch from "../type/ApiFetch";
-import type { RegisterPayload, LoginPayload } from "../type/AuthType";
+import { AuthContext } from "../../context/AuthContext";
+import apiFetch from "../../type/ApiFetch";
+import type { RegisterPayload, LoginPayload } from "../../type/AuthType";
 
-import img2 from "../assets/img 2.jpg";
-import MonsterSpinner from "./Spinner";
-import "../style/registration.scss";
+import img2 from "../../assets/img 2.jpg";
+import MonsterSpinner from "../Element/Spinner";
+import "../../style/registration.scss";
 
 const RegistrationPageComponent: React.FC = () => {
   const navigate = useNavigate();

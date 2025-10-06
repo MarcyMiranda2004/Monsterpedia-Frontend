@@ -2,12 +2,12 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Container, FloatingLabel, Form, Image } from "react-bootstrap";
 import { Eye, EyeSlash } from "react-bootstrap-icons";
-import { AuthContext } from "../context/AuthContext";
-import apiFetch from "../type/ApiFetch";
+import { AuthContext } from "../../context/AuthContext";
+import apiFetch from "../../type/ApiFetch";
 
-import img2 from "../assets/img 2.jpg";
-import MonsterSpinner from "./Spinner";
-import "../style/login.scss";
+import img2 from "../../assets/img 2.jpg";
+import MonsterSpinner from "../Element/Spinner";
+import "../../style/login.scss";
 
 const LoginPageComponent: React.FC = () => {
   const navigate = useNavigate();

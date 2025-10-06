@@ -2,12 +2,12 @@ import { Container, Row, Col, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import { Github, Linkedin, Instagram } from "react-bootstrap-icons";
-import "../style/footer.scss";
+import "../../style/footer.scss";
 
 const FooterComponent: React.FC = () => {
   return (
     <>
-      <Container fluid className="bg-m-dark-gray p-4 text-m-white">
+      <Container fluid className="bg-m-dark-gray p-4  mt-5 text-m-white">
         <Row className="mb-4">
           <Col
             sm={12}

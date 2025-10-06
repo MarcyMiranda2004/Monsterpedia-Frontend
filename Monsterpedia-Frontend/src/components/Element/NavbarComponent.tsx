@@ -3,12 +3,12 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { Button, Form, Image } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 import { PersonCircle, Search } from "react-bootstrap-icons";
 
-import "../style/global.scss";
-import "../style/navbar.scss";
+import "../../style/global.scss";
+import "../../style/navbar.scss";
 
 const NavbarComponent: React.FC = () => {
   const navigate = useNavigate();
@@ -139,9 +139,9 @@ const NavbarComponent: React.FC = () => {
                   {isBackOfficeUser && (
                     <NavDropdown.Item
                       as="button"
-                      onClick={() => navigate("/backOffice")}
+                      onClick={() => navigate("/backoffice/home")}
                     >
-                      BackOffice
+                      MonsterOffice
                     </NavDropdown.Item>
                   )}
 

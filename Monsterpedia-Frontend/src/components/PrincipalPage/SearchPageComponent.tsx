@@ -1,11 +1,10 @@
 import { Alert, Container, Row, Col, Card } from "react-bootstrap";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
 
-import apiFetch from "../type/ApiFetch";
-import MonsterSpinner from "./Spinner";
-import type { MonsterDto } from "../type/Monster";
+import apiFetch from "../../type/ApiFetch";
+import MonsterSpinner from "../Element/Spinner";
+import type { MonsterDto } from "../../type/Monster";
 
 const SearchPageComponent: React.FC = () => {
   const [params] = useSearchParams();
@@ -54,7 +53,11 @@ const SearchPageComponent: React.FC = () => {
   }
 
   if (error) {
-    return <p className="text-danger">{error}</p>;
+    return (
+      <Container className="d-flex align-items-center justify-content-center">
+        <p className="text-danger">{error}</p>;
+      </Container>
+    );
   }
 
   return (
