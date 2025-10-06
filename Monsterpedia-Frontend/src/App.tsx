@@ -40,7 +40,7 @@ function App() {
               element={<UserProfilePageComponent />}
             />
 
-            <Route path="/home" element={<HomePageComponent />} />
+            <Route path="/" element={<HomePageComponent />} />
 
             <Route path="/search" element={<SearchPageComponent />} />
 

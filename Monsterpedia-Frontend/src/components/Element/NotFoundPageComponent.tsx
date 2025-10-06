@@ -18,7 +18,7 @@ const NotFoundPage = () => {
           non disponibile, riprova più tardi
         </p>
       </div>
-      <Link to="/home" className="text-m-secondary">
+      <Link to="/" className="text-m-secondary">
         Torna alla home
       </Link>
     </Container>

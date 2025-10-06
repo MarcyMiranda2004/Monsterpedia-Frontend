@@ -166,7 +166,7 @@ const BackOfficeHomeComponent = () => {
             <div className="d-md-none">
               <Button
                 className="text-m-white border border-1 border-m-dark-gray m-0 bo-btn"
-                onClick={() => navigate("/home")}
+                onClick={() => navigate("/")}
               >
                 <HouseFill size={22} />
               </Button>
@@ -175,7 +175,7 @@ const BackOfficeHomeComponent = () => {
             <div className="d-none d-md-block">
               <Button
                 className="text-m-white border border-1 border-m-dark-gray m-0 bo-btn"
-                onClick={() => navigate("/home")}
+                onClick={() => navigate("/")}
               >
                 <ArrowLeft /> Torna alla Home
               </Button>

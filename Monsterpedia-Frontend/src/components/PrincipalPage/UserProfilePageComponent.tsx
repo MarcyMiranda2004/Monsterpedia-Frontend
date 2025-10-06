@@ -198,7 +198,7 @@ const UserProfilePageComponent: React.FC = () => {
 
       logout();
       setPassword("");
-      navigate("/home");
+      navigate("/");
     } catch (error: unknown) {
       console.error("Errore durante l'eliminazione:", error);
       alert(`Impossibile eliminare l'account: ${error}`);

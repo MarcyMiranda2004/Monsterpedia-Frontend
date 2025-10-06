@@ -51,7 +51,7 @@ const NavbarComponent: React.FC = () => {
           {/* Logo md+ */}
           <Navbar.Brand
             className="bg-m-dark-gray d-flex logo-trapezoide px-2 pe-5 d-none d-lg-block pointer"
-            onClick={() => navigate("home")}
+            onClick={() => navigate("/")}
           >
             <Image
               src="https://res.cloudinary.com/dqtrha0hz/image/upload/v1759525300/Monsterpedia_Logo_2_glba3e.png"
@@ -64,7 +64,7 @@ const NavbarComponent: React.FC = () => {
           {/* Logo sm */}
           <Navbar.Brand
             className="bg-m-dark-gray d-flex justify-content-center logo-trapezoide ps-4 pe-5 d-lg-none"
-            onClick={() => navigate("home")}
+            onClick={() => navigate("/")}
           >
             <Image
               src="https://res.cloudinary.com/dqtrha0hz/image/upload/v1756132168/Monsterpedia_Logo_oaanuz.png"
